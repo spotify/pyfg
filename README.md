@@ -20,6 +20,15 @@ Documentation
 
 You can find the documentation on [Read the Docs](http://pyfg.readthedocs.org/en/latest/index.html).
 
+Installation
+============
+
+To install the library execute:
+
+```
+pip install pyfg
+```
+
 Examples
 ========
 
