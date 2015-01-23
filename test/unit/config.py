@@ -1,0 +1,5 @@
+vm_ip = '192.168.76.50'
+username = 'admin'
+password = ''
+config_file_1 = 'fortios_config_1.txt'
+config_file_2 = 'fortios_config_2.txt'
