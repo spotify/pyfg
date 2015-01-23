@@ -13,9 +13,9 @@ setup(
     version = "0.40",
     packages = find_packages(),
     author = "XNET",
-    author_email = "xnet@spotify.com.com",
+    author_email = "dbarroso@spotify.com",
     description = "Python API for fortigate",
-    url = "https://ghe.spotify.net/XNET/FortiAPI",
+    url = "https://github.com/spotify/pyfg",
     include_package_data = True,
     install_requires=reqs
 )
