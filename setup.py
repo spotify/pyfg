@@ -10,7 +10,7 @@ reqs = [str(ir.req) for ir in install_reqs]
 
 setup(
     name = "pyfg",
-    version = "0.40",
+    version = "0.41",
     packages = find_packages(),
     author = "XNET",
     author_email = "dbarroso@spotify.com",
