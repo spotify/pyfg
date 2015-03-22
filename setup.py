@@ -11,8 +11,8 @@ install_reqs = parse_requirements('requirements.txt', session=uuid.uuid1())
 reqs = [str(ir.req) for ir in install_reqs]
 
 setup(
-    name = "pyfg",
-    version = "0.41",
+    name = "pyfg",  
+    version = "0.42",
     packages = find_packages(),
     author = "XNET",
     author_email = "dbarroso@spotify.com",
