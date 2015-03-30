@@ -350,10 +350,8 @@ class FortiConfig(object):
         if output.__class__ is str or output.__class__ is unicode:
             output = output.splitlines()
          
-        ignore_lines = ['uuid']
-
         for line in output:
-            if line in ignore_lines:
+            if 'uuid' in line:
                 continue
             line = line.strip()
             result = regexp.match(line)

@@ -291,12 +291,15 @@ class FortiOS(object):
             # We retry if we see codes -3 (some object you are trying to assign does not exist yet) and
             # code -23 (you are trying to delete an object which is assigned to some other object).
             retry_codes = [-3, -23]
-            for wc in wrong_commands:
-                if int(wc[0]) in retry_codes:
-                    config_text = self.compare_config()
-                    wrong_commands = _execute(config_text)
-                    self._reload_config(reload_original_config=False)
-                    break
+            retries = 3
+            while retries > 0:
+                retries -= 1
+                for wc in wrong_commands:
+                    if int(wc[0]) in retry_codes:
+                        config_text = self.compare_config()
+                        wrong_commands = _execute(config_text)
+                        self._reload_config(reload_original_config=False)
+                        break            
 
         if len(wrong_commands) > 0:
             exit_code = -2
