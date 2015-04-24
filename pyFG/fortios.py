@@ -257,8 +257,8 @@ class FortiOS(object):
     def _commit(self, config_text=None, force=False, reload_original_config=True):
         """
         This method is the same as the :py:method:`commit`: method, however, it has an extra command that will trigger
-        the reload of the running config. The reason behind this is that in some circunstances you don´ want
-        to reload the running config, for example, when doing a rollbabk.
+        the reload of the running config. The reason behind this is that in some circumstances you don´ want
+        to reload the running config, for example, when doing a rollback.
 
         See :py:method:`commit`: for more details.
         """
@@ -285,21 +285,18 @@ class FortiOS(object):
         wrong_commands = _execute(config_text)
 
         self._reload_config(reload_original_config)
-        if config_text is None:
-            # We only support retrying when using the candidate config. If the user specified
-            # which commands to run he is the one responsible they are correct.
-            # We retry if we see codes -3 (some object you are trying to assign does not exist yet) and
-            # code -23 (you are trying to delete an object which is assigned to some other object).
-            retry_codes = [-3, -23]
-            retries = 3
-            while retries > 0:
-                retries -= 1
-                for wc in wrong_commands:
-                    if int(wc[0]) in retry_codes:
+
+        retry_codes = [-3, -23]
+        retries = 5
+        while retries > 0:
+            retries -= 1
+            for wc in wrong_commands:
+                if int(wc[0]) in retry_codes:
+                    if config_text is None:
                         config_text = self.compare_config()
-                        wrong_commands = _execute(config_text)
-                        self._reload_config(reload_original_config=False)
-                        break            
+                    wrong_commands = _execute(config_text)
+                    self._reload_config(reload_original_config=False)
+                    break
 
         if len(wrong_commands) > 0:
             exit_code = -2
@@ -309,10 +306,8 @@ class FortiOS(object):
                 exit_code = -1
                 self.rollback()
 
-            if exit_code == -1:
+            if exit_code < 0 :
                 raise exceptions.FailedCommit(wrong_commands)
-            elif exit_code == -2:
-                raise exceptions.ForcedCommit(wrong_commands)
 
     def rollback(self):
         """
@@ -322,10 +317,8 @@ class FortiOS(object):
 
         config_text = self.compare_config(other=self.original_config)
 
-        if len(config_text) == 0:
-            return 0, []
-        else:
-            return self._commit(config_text, reload_original_config=False)
+        if len(config_text) > 0:
+            return self._commit(config_text, force=True, reload_original_config=False)
 
     @staticmethod
     def _parse_batch_lastlog(last_log):
@@ -333,7 +326,7 @@ class FortiOS(object):
         This static method will help reading the result of the commit, command by command.
 
         Args:
-            last_log(list): A list containing, line by line, the result of commiting the changes.
+            last_log(list): A list containing, line by line, the result of committing the changes.
 
         Returns:
             A list of tuples that went wrong. The tuple will contain (*status_code*, *command*)
