@@ -349,7 +349,7 @@ class FortiConfig(object):
 
         if output.__class__ is str or output.__class__ is unicode:
             output = output.splitlines()
-         
+
         for line in output:
             if 'uuid' in line:
                 continue
@@ -364,10 +364,12 @@ class FortiConfig(object):
                 if action == 'config' or action == 'edit':
 
                     data = data.replace('"', '')
-                    config_block = FortiConfig(data, action, current_block)
 
                     if data not in current_block.get_block_names():
+                        config_block = FortiConfig(data, action, current_block)
                         current_block[data] = config_block
+                    else:
+                        config_block = current_block[data]
 
                     current_block = config_block
                 elif action == 'end' or action == 'next':
