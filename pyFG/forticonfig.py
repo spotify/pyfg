@@ -353,6 +353,8 @@ class FortiConfig(object):
         for line in output:
             if 'uuid' in line:
                 continue
+            if 'snmp-index' in line:
+                continue
             line = line.strip()
             result = regexp.match(line)
 
