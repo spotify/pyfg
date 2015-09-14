@@ -27,7 +27,13 @@ Tutorials
    first_steps
    loading_config_from_file
 
+Options
+=======
+.. toctree::
+   :maxdepth: 2
 
+   ssh_config.rst
+   
 Classes
 =======
 
