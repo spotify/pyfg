@@ -6,6 +6,7 @@ import exceptions
 import paramiko
 import StringIO
 import re
+import os
 from difflib import Differ
 
 import logging
@@ -61,13 +62,27 @@ class FortiOS(object):
         self.ssh = paramiko.SSHClient()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-        self.ssh.connect(
-            self.hostname,
-            timeout=10,
-            username=self.username,
-            password=self.password,
-            key_filename=self.keyfile
-        )
+        if os.path.exists(os.path.expanduser("~/.ssh/config")):
+          ssh_config = paramiko.SSHConfig()
+          user_config_file = os.path.expanduser("~/.ssh/config")
+          with open(user_config_file) as f:
+            ssh_config.parse(f)
+          f.close()
+
+        cfg = {
+          'hostname': self.hostname, 
+          'timeout': 10,
+          'username': self.username,
+          'password': self.password,
+          'key_filename': self.keyfile
+        }
+        host_conf = ssh_config.lookup(self.hostname)
+        if host_conf:
+          if 'proxycommand' in host_conf:
+            cfg['sock'] = paramiko.ProxyCommand(host_conf['proxycommand'])
+
+
+        self.ssh.connect(**cfg)
 
     def close(self):
         """
