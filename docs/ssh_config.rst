@@ -12,7 +12,7 @@ inside the ~/.ssh/config of the user. Currently supported:
 Example 1
 ---------
 
-Simple "alias" where us you would use the 'hostname' "fortigate" inside your
+Simple "alias" whereas you would use the 'hostname' "fortigate" inside your
 scripts instead of the IP address. Handy if you do not have a DNS server.
 
 Host fortigate
@@ -23,7 +23,7 @@ Host fortigate
 Example 2
 ---------
 
-A bit more complex whereas you need go via a SSH proxy server to reach the 
+A bit more complex for when you need go via a SSH proxy server to reach the 
 appliance
 
 Host fortigate
