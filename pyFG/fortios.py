@@ -81,6 +81,12 @@ class FortiOS(object):
           if host_conf:
             if 'proxycommand' in host_conf:
               cfg['sock'] = paramiko.ProxyCommand(host_conf['proxycommand'])
+            if 'user' in host_conf:
+              cfg['username'] = host_conf['user']
+            if 'identityfile' in host_conf:
+              cfg['key_filename'] = host_conf['identityfile']
+            if 'hostname' in host_conf:
+              cfg['hostname'] = host_conf['hostname']
 
         self.ssh.connect(**cfg)
 
