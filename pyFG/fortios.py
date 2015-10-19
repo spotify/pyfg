@@ -16,7 +16,7 @@ logger = logging.getLogger('pyFG')
 
 class FortiOS(object):
 
-    def __init__(self, hostname, vdom=None, username=None, password=None, keyfile=None):
+    def __init__(self, hostname, vdom=None, username=None, password=None, keyfile=None, timeout=60):
         """
         Represents a device running FortiOS.
 
@@ -41,6 +41,8 @@ class FortiOS(object):
                 used
             * **password** (str) -- Username password
             * **keyfile** (str) -- Path to the private key in case you want to use this authentication method.
+            * **timeout** (int) -- Time in seconds to wait for the device to respond.
+
         """
         self.hostname = hostname
         self.vdom = vdom
@@ -51,6 +53,7 @@ class FortiOS(object):
         self.username = username
         self.password = password
         self.keyfile = keyfile
+        self.timeout = timeout
 
     def open(self):
         """
@@ -64,7 +67,7 @@ class FortiOS(object):
 
         cfg = {
           'hostname': self.hostname, 
-          'timeout': 10,
+          'timeout': self.timeout,
           'username': self.username,
           'password': self.password,
           'key_filename': self.keyfile
