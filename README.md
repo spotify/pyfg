@@ -18,7 +18,7 @@ This API allows you to interact with a device runnine FortiOS in a sane way. Wit
 Documentation
 =============
 
-You can find the documentation on [Read the Docs](http://pyfg.readthedocs.org/en/latest/index.html).
+You can find the documentation on [Read the Docs](https://pyfg.readthedocs.io/en/latest/index.html).
 
 Installation
 ============
