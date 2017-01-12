@@ -2,8 +2,8 @@
 from __future__ import unicode_literals
 
 from pyFG.forticonfig import FortiConfig
+from pyFG import exceptions
 
-import exceptions
 import paramiko
 import re
 import os
