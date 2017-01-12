@@ -1,2 +1,4 @@
-from fortios import FortiOS
-from forticonfig import FortiConfig
+from pyFG.fortios import FortiOS
+from pyFG.forticonfig import FortiConfig
+
+__all__ = ['FortiOS', 'FortiConfig']
