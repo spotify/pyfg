@@ -12,10 +12,10 @@ reqs = [str(ir.req) for ir in install_reqs]
 
 setup(
     name = "pyfg",  
-    version = "0.47",
+    version = "0.48",
     packages = find_packages(),
     author = "XNET",
-    author_email = "dbarroso@spotify.com",
+    author_email = "lindblom+pyfg@spotify.com",
     description = "Python API for fortigate",
     url = "https://github.com/spotify/pyfg",
     include_package_data = True,
