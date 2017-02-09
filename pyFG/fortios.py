@@ -1,10 +1,10 @@
 # coding=utf-8
+from __future__ import unicode_literals
 
-from forticonfig import FortiConfig
+from pyFG.forticonfig import FortiConfig
+from pyFG import exceptions
 
-import exceptions
 import paramiko
-import StringIO
 import re
 import os
 from difflib import Differ
@@ -66,30 +66,29 @@ class FortiOS(object):
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
         cfg = {
-          'hostname': self.hostname, 
-          'timeout': self.timeout,
-          'username': self.username,
-          'password': self.password,
-          'key_filename': self.keyfile
+            'hostname': self.hostname,
+            'timeout': self.timeout,
+            'username': self.username,
+            'password': self.password,
+            'key_filename': self.keyfile
         }
 
         if os.path.exists(os.path.expanduser("~/.ssh/config")):
-          ssh_config = paramiko.SSHConfig()
-          user_config_file = os.path.expanduser("~/.ssh/config")
-          with open(user_config_file) as f:
-            ssh_config.parse(f)
-          f.close()
+            ssh_config = paramiko.SSHConfig()
+            user_config_file = os.path.expanduser("~/.ssh/config")
+            with open(user_config_file) as f:
+                ssh_config.parse(f)
 
-          host_conf = ssh_config.lookup(self.hostname)
-          if host_conf:
-            if 'proxycommand' in host_conf:
-              cfg['sock'] = paramiko.ProxyCommand(host_conf['proxycommand'])
-            if 'user' in host_conf:
-              cfg['username'] = host_conf['user']
-            if 'identityfile' in host_conf:
-              cfg['key_filename'] = host_conf['identityfile']
-            if 'hostname' in host_conf:
-              cfg['hostname'] = host_conf['hostname']
+            host_conf = ssh_config.lookup(self.hostname)
+            if host_conf:
+                if 'proxycommand' in host_conf:
+                    cfg['sock'] = paramiko.ProxyCommand(host_conf['proxycommand'])
+                if 'user' in host_conf:
+                    cfg['username'] = host_conf['user']
+                if 'identityfile' in host_conf:
+                    cfg['key_filename'] = host_conf['identityfile']
+                if 'hostname' in host_conf:
+                    cfg['hostname'] = host_conf['hostname']
 
         self.ssh.connect(**cfg)
 
@@ -165,7 +164,7 @@ class FortiOS(object):
 
         regex = re.compile('Command fail')
         if len(regex.findall(output)) > 0:
-            msg = '%s %s:\n%s\n%s'% (err_msg, self.ssh.get_host_keys().keys()[0], command, output)
+            msg = '%s %s:\n%s\n%s' % (err_msg, self.ssh.get_host_keys().keys()[0], command, output)
             logger.error(msg)
             raise exceptions.CommandExecutionException(msg)
 
@@ -330,7 +329,7 @@ class FortiOS(object):
                 exit_code = -1
                 self.rollback()
 
-            if exit_code < 0 :
+            if exit_code < 0:
                 raise exceptions.FailedCommit(wrong_commands)
 
     def rollback(self):
@@ -363,7 +362,6 @@ class FortiOS(object):
             if result is not None:
                 status_code = result.group(1)
                 command = result.group(2)
-
                 if int(status_code) < 0:
                     wrong_commands.append((status_code, command))
 

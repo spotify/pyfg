@@ -1,5 +1,9 @@
+from __future__ import unicode_literals
+
 import re
 from collections import OrderedDict
+
+from pyFG import py23_compat
 
 
 class FortiConfig(object):
@@ -347,7 +351,7 @@ class FortiConfig(object):
         regexp = re.compile('^(config |edit |set |end$|next$)(.*)')
         current_block = self
 
-        if output.__class__ is str or output.__class__ is unicode:
+        if isinstance(output, py23_compat.string_types):
             output = output.splitlines()
 
         for line in output:
@@ -362,17 +366,13 @@ class FortiConfig(object):
                 action = result.group(1).strip()
                 data = result.group(2).strip()
 
-
                 if action == 'config' or action == 'edit':
-
                     data = data.replace('"', '')
-
                     if data not in current_block.get_block_names():
                         config_block = FortiConfig(data, action, current_block)
                         current_block[data] = config_block
                     else:
                         config_block = current_block[data]
-
                     current_block = config_block
                 elif action == 'end' or action == 'next':
                     current_block = current_block.get_parent()
