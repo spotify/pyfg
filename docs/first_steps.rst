@@ -15,7 +15,7 @@ Loading configuration
 
 Now you can easily load a block of configuration and do some read operations:
 
-    >>> d.load_configuration('router bgp')
+    >>> d.load_config('router bgp')
 
 
 We can verify easily that we got the configuration doing the following:
