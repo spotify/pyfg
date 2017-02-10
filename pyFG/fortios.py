@@ -2,11 +2,14 @@
 from __future__ import unicode_literals
 
 from pyFG.forticonfig import FortiConfig
+from pyFG import py23_compat
 from pyFG import exceptions
+
 
 import paramiko
 import re
 import os
+import io
 from difflib import Differ
 
 import logging
@@ -76,7 +79,7 @@ class FortiOS(object):
         if os.path.exists(os.path.expanduser("~/.ssh/config")):
             ssh_config = paramiko.SSHConfig()
             user_config_file = os.path.expanduser("~/.ssh/config")
-            with open(user_config_file) as f:
+            with io.open(config_file, encoding='utf-8') as f:
                 ssh_config.parse(f)
 
             host_conf = ssh_config.lookup(self.hostname)
@@ -99,6 +102,15 @@ class FortiOS(object):
 
         logger.debug('Closing connection to device %s' % self.hostname)
         self.ssh.close()
+
+    @staticmethod
+    def _read_wrapper(data):
+        """Ensure unicode always returned on read."""
+        # Paramiko (strangely) in PY3 returns an int here.
+        if isinstance(data, int):
+            data = chr(data)
+        # Ensure unicode
+        return py23_compat.text_type(data)
 
     def execute_command(self, command):
         """
@@ -129,33 +141,10 @@ class FortiOS(object):
 
         error = ''
         output = ''
-
         for e in error_chan.read():
-            error += e
-
+            error = error + self._read_wrapper(o)
         for o in output_chan.read():
-            output += o
-
-        '''
-        output = StringIO.StringIO()
-        error = StringIO.StringIO()
-
-        while not chan.exit_status_ready():
-            if chan.recv_stderr_ready():
-                data_err = chan.recv_stderr(1024)
-                while data_err:
-                    error.write(data_err)
-                    data_err = chan.recv_stderr(1024)
-
-            if chan.recv_ready():
-                data = chan.recv(256)
-                while data:
-                    output.write(data)
-                    data = chan.recv(256)
-
-        output = output.getvalue()
-        error = error.getvalue()
-        '''
+            output = output + self._read_wrapper(o)
 
         if len(error) > 0:
             msg = '%s %s:\n%s\n%s' % (err_msg, self.ssh.get_host_keys().keys()[0], command, error)
