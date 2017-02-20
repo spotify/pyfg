@@ -187,7 +187,7 @@ class FortiConfig(object):
         Yields:
             parameter_name, parameter_value
         """
-        for key, value in self.parameters.iteritems():
+        for key, value in self.parameters.items():
             yield key, value
 
     def iterblocks(self):
@@ -205,7 +205,7 @@ class FortiConfig(object):
         Yields:
             sub_block_name, sub_block_value
         """
-        for key, data in self.sub_blocks.iteritems():
+        for key, data in self.sub_blocks.items():
             yield key, data
 
     def get_parameter_names(self):
