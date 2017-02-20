@@ -11,13 +11,13 @@ install_reqs = parse_requirements('requirements.txt', session=uuid.uuid1())
 reqs = [str(ir.req) for ir in install_reqs]
 
 setup(
-    name = "pyfg",  
-    version = "0.48",
-    packages = find_packages(),
-    author = "XNET",
-    author_email = "lindblom+pyfg@spotify.com",
-    description = "Python API for fortigate",
-    url = "https://github.com/spotify/pyfg",
-    include_package_data = True,
+    name="pyfg",
+    version="0.49",
+    packages=find_packages(),
+    author="XNET",
+    author_email="lindblom+pyfg@spotify.com",
+    description="Python API for fortigate",
+    url="https://github.com/spotify/pyfg",
+    include_package_data=True,
     install_requires=reqs
 )
