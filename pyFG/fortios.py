@@ -79,7 +79,7 @@ class FortiOS(object):
         if os.path.exists(os.path.expanduser("~/.ssh/config")):
             ssh_config = paramiko.SSHConfig()
             user_config_file = os.path.expanduser("~/.ssh/config")
-            with io.open(config_file, 'rt', encoding='utf-8') as f:
+            with io.open(user_config_file, 'rt', encoding='utf-8') as f:
                 ssh_config.parse(f)
 
             host_conf = ssh_config.lookup(self.hostname)
@@ -142,7 +142,7 @@ class FortiOS(object):
         error = ''
         output = ''
         for e in error_chan.read():
-            error = error + self._read_wrapper(o)
+            error = error + self._read_wrapper(e)
         for o in output_chan.read():
             output = output + self._read_wrapper(o)
 
