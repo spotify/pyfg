@@ -57,7 +57,14 @@ class FortiOS(object):
         self.password = password
         self.keyfile = keyfile
         self.timeout = timeout
-
+        
+        # Set key exchange explcitly to address known fortinet issue
+        paramiko.Transport._preferred_kex = ('diffie-hellman-group14-sha1',
+                                             'diffie-hellman-group-exchange-sha1',
+                                             'diffie-hellman-group-exchange-sha256',
+                                             'diffie-hellman-group1-sha1',
+                                             )
+        
     def open(self):
         """
         Opens the ssh session with the device.
