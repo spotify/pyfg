@@ -1,5 +1,7 @@
-FortiAPI
-========
+PyFG
+====
+
+PyFG is a Python (2.7 tested, may work on other versions) package.
 
 API for FortiOS or how to turn FortiOS into JunOS
 
