@@ -285,12 +285,18 @@ class FortiOS(object):
             if config_text is None:
                 config_text = self.compare_config()
 
+            config_vdom = ""
+
             if self.vdom is None:
                 pre = ''
+            elif not 'global' in self.vdom:
+                config_vdom = 'conf vdom\n  edit %s\n' % self.vdom
+                pre = 'conf global\n    '
             else:
                 pre = 'conf global\n    '
 
             cmd = '%sexecute batch start\n' % pre
+            cmd += config_vdom
             cmd += config_text
             cmd += '\nexecute batch end\n'
 
