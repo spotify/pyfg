@@ -139,7 +139,7 @@ class FortiOS(object):
         err_msg = 'Something happened when executing some commands on device'
 
         chan = self.ssh.get_transport().open_session()
-        chan.settimeout(5)
+        chan.settimeout(30)
 
         chan.exec_command(command)
 
