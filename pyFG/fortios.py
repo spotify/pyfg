@@ -93,7 +93,7 @@ class FortiOS(object):
             if host_conf:
                 if 'proxycommand' in host_conf:
                     cfg['sock'] = paramiko.ProxyCommand(host_conf['proxycommand'])
-                if 'user' in host_conf:
+                if 'user' in host_conf and not self.username:
                     cfg['username'] = host_conf['user']
                 if 'identityfile' in host_conf:
                     cfg['key_filename'] = host_conf['identityfile']
