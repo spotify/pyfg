@@ -56,8 +56,8 @@ class FortiConfig(object):
 
         self.sub_blocks = OrderedDict()
         self.new_sub_blocks = OrderedDict()
-        self.parameters = dict()
-        self.new_parameters = dict()
+        self.parameters = OrderedDict()
+        self.new_parameters = OrderedDict()
 
     def __repr__(self):
         return 'Config Block: %s' % self.get_name()
