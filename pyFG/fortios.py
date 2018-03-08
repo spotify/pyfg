@@ -19,7 +19,7 @@ logger = logging.getLogger('pyFG')
 
 class FortiOS(object):
 
-    def __init__(self, hostname, vdom=None, username=None, password=None, keyfile=None, timeout=60):
+    def __init__(self, hostname, vdom=None, username=None, password=None, keyfile=None, timeout=60, port=22):
         """
         Represents a device running FortiOS.
 
@@ -45,6 +45,7 @@ class FortiOS(object):
             * **password** (str) -- Username password
             * **keyfile** (str) -- Path to the private key in case you want to use this authentication method.
             * **timeout** (int) -- Time in seconds to wait for the device to respond.
+            * **port** (int) -- Port of the device you want to connect.
 
         """
         self.hostname = hostname
@@ -57,6 +58,7 @@ class FortiOS(object):
         self.password = password
         self.keyfile = keyfile
         self.timeout = timeout
+        self.port = port
         
         # Set key exchange explcitly to address known fortinet issue
         paramiko.Transport._preferred_kex = ('diffie-hellman-group14-sha1',
@@ -80,7 +82,8 @@ class FortiOS(object):
             'timeout': self.timeout,
             'username': self.username,
             'password': self.password,
-            'key_filename': self.keyfile
+            'key_filename': self.keyfile,
+            'port': self.port
         }
 
         if os.path.exists(os.path.expanduser("~/.ssh/config")):
@@ -99,6 +102,8 @@ class FortiOS(object):
                     cfg['key_filename'] = host_conf['identityfile']
                 if 'hostname' in host_conf:
                     cfg['hostname'] = host_conf['hostname']
+                if 'port' in host_conf:
+                    cfg['port'] = int(host_conf['port'])
 
         self.ssh.connect(**cfg)
 
