@@ -169,7 +169,7 @@ class FortiOS(object):
         # We look for the prompt and remove it
         i = 0
         for line in output:
-            current_line = line.split('#')
+            current_line = line.split(' # ')
 
             if len(current_line) > 1:
                 output[i] = current_line[1]
