@@ -19,7 +19,8 @@ logger = logging.getLogger('pyFG')
 
 class FortiOS(object):
 
-    def __init__(self, hostname, vdom=None, username=None, password=None, keyfile=None, timeout=60):
+    def __init__(self, hostname, vdom=None, username=None, password=None, keyfile=None, timeout=60,
+                 chan_timeout=20):
         """
         Represents a device running FortiOS.
 
@@ -44,7 +45,8 @@ class FortiOS(object):
                 used
             * **password** (str) -- Username password
             * **keyfile** (str) -- Path to the private key in case you want to use this authentication method.
-            * **timeout** (int) -- Time in seconds to wait for the device to respond.
+            * **timeout** (int) -- Time in seconds to wait for connecting the device.
+            * **chan_timeout** (int) -- Time in seconds to wait for the device to respond via channel.
 
         """
         self.hostname = hostname
@@ -57,6 +59,7 @@ class FortiOS(object):
         self.password = password
         self.keyfile = keyfile
         self.timeout = timeout
+        self.chan_timeout = chan_timeout
         
         # Set key exchange explcitly to address known fortinet issue
         paramiko.Transport._preferred_kex = ('diffie-hellman-group14-sha1',
@@ -139,7 +142,7 @@ class FortiOS(object):
         err_msg = 'Something happened when executing some commands on device'
 
         chan = self.ssh.get_transport().open_session()
-        chan.settimeout(5)
+        chan.settimeout(self.chan_timeout)
 
         chan.exec_command(command)
 
