@@ -148,10 +148,25 @@ class FortiOS(object):
 
         error = ''
         output = ''
-        for e in error_chan.read():
-            error = error + self._read_wrapper(e)
+        try:
+            for e in error_chan.read():
+                error = error + self._read_wrapper(e)
+        except:
+            pass
+        
+        _buf = ""
+        _bufcnt = 0
+        _bufmaxlength = 2048
+        
         for o in output_chan.read():
-            output = output + self._read_wrapper(o)
+            _buf = _buf + self._read_wrapper(o)
+            _bufcnt += 1
+            if _bufcnt > _bufmaxlength:
+                output = output + _buf
+                _buf = ""
+                _bufcnt = 0
+        if _bufcnt > 0:
+            output = output + _buf
 
         if len(error) > 0:
             msg = '%s %s:\n%s\n%s' % (err_msg, self.ssh.get_host_keys().keys()[0], command, error)
