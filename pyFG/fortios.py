@@ -148,9 +148,12 @@ class FortiOS(object):
 
         error = ''
         output = ''
-        for e in error_chan.read():
-            error = error + self._read_wrapper(e)
-            
+        try:
+            for e in error_chan.read():
+                error = error + self._read_wrapper(e)
+        except:
+            pass
+        
         _buf = ""
         _bufcnt = 0
         _bufmaxlength = 2048
