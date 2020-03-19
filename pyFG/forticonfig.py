@@ -340,6 +340,32 @@ class FortiConfig(object):
             text = '%s%s%s' % (pre, text, post)
         return text
 
+    def to_dict(self, root=None, tree_dict=None):
+        """
+        This method convert FortiConfig to dict. 
+
+        Args:
+            - **root** (class:`~pyFG.forticonfig.FortiConfig` object):
+                    * If ``None`` use self as tree root.
+            - **tree_dict** (dict): This value is for output.
+                    * If ``None`` use a blank dict.
+        """
+        if root is None:
+            root = self
+        if tree_dict is None:
+            tree_dict = {}
+        if not hasattr(root, 'get_block_names') or not root.get_block_names():
+            return
+        for child in root.get_block_names():
+            if not tree_dict.get(child):
+                if root[child].get_parameter_names():
+                    tree_dict[child] = {k: root[child].get_param(k).replace('"', '')
+                                        for k in root[child].get_parameter_names()}
+                else:
+                    tree_dict[child] = {}
+            self.to_dict(root[child], tree_dict[child])
+        return tree_dict
+
     def parse_config_output(self, output):
         """
         This method will parse a string containing FortiOS config and will load it into the current
