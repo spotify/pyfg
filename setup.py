@@ -1,7 +1,10 @@
 import uuid
 
 from setuptools import setup, find_packages
-from pip.req import parse_requirements
+try:
+    from pip._internal.req import parse_requirements
+except ImportError:
+    from pip.req import parse_requirements
 
 # parse_requirements() returns generator of pip.req.InstallRequirement objects
 install_reqs = parse_requirements('requirements.txt', session=uuid.uuid1())
